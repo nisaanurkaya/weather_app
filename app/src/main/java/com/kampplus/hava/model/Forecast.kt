@@ -13,7 +13,14 @@ data class Forecast(
     val current: CurrentWeather,
     val hourly: List<HourlyForecast>,
     val daily: List<DailyForecast>
-)
+
+) {
+    // Fahrenheit dönüşümü için sınıf içine basit bir property ekleyebilirsin
+    val currentTemperatureFahrenheit: Double
+        get() = (current.temperatureC * 9/5) + 32
+}
+
+
 
 /**
  * Şu anki hava. Son üç alan servis tarafından her zaman gönderilmez,
@@ -25,7 +32,8 @@ data class CurrentWeather(
     val observedAt: LocalDateTime,
     val apparentTemperatureC: Double? = null,
     val humidityPercent: Int? = null,
-    val windSpeedKmh: Double? = null
+    val windSpeedKmh: Double? = null,
+    val isDayTime: Boolean = true
 )
 
 /** Tek bir saatlik tahmin satırı. */

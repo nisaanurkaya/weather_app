@@ -1,113 +1,87 @@
 package com.kampplus.hava.ui.city
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kampplus.hava.model.City
-import com.kampplus.hava.ui.theme.HavaTheme
+import com.kampplus.hava.ui.settings.AppThemeMode
 
-/**
- * Listedeki tek bir şehir satırı.
- *
- * Yapısı: `Card` → `Row` → rozet + `Spacer` + `Column(weight(1f))` + sağ ok.
- *
- * `Modifier.weight(1f)`: ortadaki sütun kalan boşluğun tamamını kaplar, böylece
- * sağ oku sağ kenara iter. Uzun şehir adları (Afyonkarahisar) rozeti ezmez.
- *
- * @param onClick Karta dokunulduğunda çağrılır. Bileşen ne olacağını bilmez,
- *   yalnızca haber verir — olay yukarı, veri aşağı (state hoisting).
- */
 @Composable
-fun CityCard(city: City, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(onClick = onClick, modifier = modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            CountryBadge(code = city.countryCode)
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = city.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    // Tek satıra sığmayan ad "..." ile kısaltılır, satır kaymaz.
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = city.subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                // Ok yalnızca görseldir; "dokunulabilir" bilgisini Card zaten verir.
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+fun CityCard(
+    city: City,
+    currentTheme: AppThemeMode,
+    isFavorite: Boolean,         // Favori mi kontrolü
+    onToggleFavorite: () -> Unit, // Kalbe tıklama aksiyonu
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val cardColor = when (currentTheme) {
+        AppThemeMode.DARK -> Color.DarkGray.copy(alpha = 0.4f)
+        AppThemeMode.LIGHT -> Color.LightGray.copy(alpha = 0.5f)
+        AppThemeMode.DYNAMIC_IMAGE -> Color.White.copy(alpha = 0.15f)
+        AppThemeMode.RAINBOW -> Color.White.copy(alpha = 0.6f)
     }
-}
 
-/**
- * Ülke kodu rozeti ("TR").
- *
- * Veri API'den geldiği için elimizde plaka numarası yok; rozete ülke kodunu
- * koyuyoruz. Kod gelmezse "?" gösterilir.
- */
-@Composable
-private fun CountryBadge(code: String?, modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier.size(44.dp),
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    val textColor = if (currentTheme == AppThemeMode.DARK || currentTheme == AppThemeMode.DYNAMIC_IMAGE) Color.White else Color(0xFF2C2C2C)
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(cardColor)
+            .clickable { onClick() }
+            .padding(12.dp)
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = code ?: "?",
-                style = MaterialTheme.typography.labelLarge
+        // Sağ üst köşedeki Kalp İkonu
+        IconButton(
+            onClick = onToggleFavorite,
+            modifier = Modifier.align(Alignment.TopEnd).size(32.dp)
+        ) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "Favori",
+                tint = if (isFavorite) Color(0xFFE57373) else textColor.copy(alpha = 0.3f)
             )
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-private fun CityCardPreview() {
-    HavaTheme {
-        CityCard(
-            city = City(
-                id = 323786,
-                name = "Ankara",
-                latitude = 39.91987,
-                longitude = 32.85427,
-                countryCode = "TR",
-                country = "Türkiye",
-                admin1 = "Ankara"
-            ),
-            onClick = {}
-        )
+        // Şehir Bilgileri (Kartın tam ortasında)
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = city.name,
+                color = textColor,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "📍 ${city.country ?: city.admin1 ?: ""}",
+                color = textColor.copy(alpha = 0.8f),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
