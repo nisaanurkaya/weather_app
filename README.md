@@ -1,3 +1,65 @@
+🌦️ Hava Durumu Uygulaması (Weather App)
+Bu proje, Bilişim Kampı Android Eğitimi kapsamında geliştirilmiş; modern Android mimari bileşenlerini, Material Design 3 tasarım ilkelerini ve Jetpack Compose teknolojisini tam anlamıyla kullanan, estetik odaklı profesyonel bir hava durumu ve şehir keşif uygulamasıdır.
+
+✨ Öne Çıkan Özellikler ve Kullanıcı Deneyimi
+Akıllı ve Canlı Arama (Live Search): Kullanıcı arama çubuğuna harf girdiği an, yerel önbellek (cache) ve optimize edilmiş contains mantığı sayesinde API yanıtını beklemeye gerek kalmadan sonuçlar milisaniyeler içinde ekranda süzülür.
+
+Kişiselleştirilmiş Favori Şehirler: Kullanıcılar beğendikleri şehirleri kalp (❤️) ikonuna tıklayarak favorilerine ekleyebilir; uygulama temaları değiştirilse dahi favori listesi global state yönetimi sayesinde güvenle korunur.
+
+Gelişmiş Tema Modları:
+
+Açık Tema (Warm Minimalist): Gözü yormayan, modern krem ve yumuşak bej tonlarına sahip lüks arayüz tasarımı.
+
+Siyah (Dark) Tema: Gece kullanımı için optimize edilmiş koyu arayüz.
+
+Rainbow Modu: Soft pastel geçişlere sahip, estetik bir renk paleti.
+
+Manzara Modu: Anlık hava olayına göre dinamik arka plan görselleri.
+
+Günün Önerisi & İlham Verici Sözler: Anlık sıcaklık, rüzgar ve hava koşullarına göre kullanıcıya günlük aktivite tavsiyeleri veren dinamik kartlar ve her gün yenilenen doğa temalı özlü sözler widget'ı.
+
+Detaylı Hava Durumu Analizi: Saatlik sıcaklık grafikleri, 7 günlük detaylı tahmin tablosu, hissedilen sıcaklık, nem yüzdesi ve rüzgar hızı değerleri.
+
+Esnek Tercihler: Türkçe ve İngilizce dil desteği ile Celsius (°C) ve Fahrenheit (°F) birim değişim seçenekleri.
+
+🏗️ Mimari ve Teknik Altyapı
+Proje, endüstri standartlarına uygun olarak MVVM (Model-View-ViewModel) tasarım deseni ve Clean Architecture prensipleriyle katmanlı bir yapıda inşa edilmiştir:
+
+Plaintext
+com.kampplus.hava/
+│
+├── model/           # Veri modelleri (City, Forecast, WeatherCondition vb.)
+├── ui/              
+│   ├── city/        # Arama ekranı, Favoriler, Canlı Arama ve Dashboard bileşenleri
+│   ├── forecast/    # Detaylı tahmin, saatlik/günlük akış ve aktivite önerileri
+│   ├── settings/    # Tema, dil ve birim tercih yönetim ekranı
+│   └── component/   # Yeniden kullanılabilir ortak arayüz elemanları (Shimmer vb.)
+└── data/            # Open-Meteo API entegrasyonu ve veri kaynakları
+🛠️ Kullanılan Teknolojiler ve Kütüphaneler
+Dil: Kotlin (%100 modern Kotlin kodu)
+
+Arayüz (UI): Jetpack Compose (Deklaratif UI yaklaşımı)
+
+Tasarım Sistemi: Material Design 3, Özel Serif ve Sans-Serif tipografi kombinasyonları
+
+Asenkron Programlama: Kotlin Coroutines & Flow (Reaktif veri akışı)
+
+Navigasyon: Navigation Compose (Tip güvenli ekran geçişleri)
+
+Veri Servisi: Open-Meteo API (Hızlı ve güvenilir hava durumu verisi)
+
+🚀 Kurulum ve Çalıştırma
+Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
+
+Repoyu klonlayın:
+
+Bash
+git clone https://github.com/nisaanurkaya/weather-app.git
+Projeyi Android Studio (Koala veya güncel bir sürüm) ile açın.
+
+Gradle dosyalarının senkronize olmasını bekleyin.
+
+Uygulamayı bir Android Emülatör veya fiziksel cihaz üzerinde çalıştırın (Shift + F10).
 <div align="center">
 
 <img src="docs/qr-repo.png" alt="github.com/tc-yusufburakdemir/weather-app adresinin QR kodu" width="220">
